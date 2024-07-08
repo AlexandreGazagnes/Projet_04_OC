@@ -32,7 +32,7 @@ class PlayerTemplate:
         return None
 
     @classmethod
-    def select_player(cls, players: List[dict]) -> int | None:
+    def select_player(cls, players: List[dict]) -> dict | None:
         """List all players AND Select the player."""
 
         if players:
@@ -48,9 +48,9 @@ class PlayerTemplate:
         )
 
         if not choice:
-            return choice
+            return None
 
-        return choice
+        return players[int(choice)]
 
     @classmethod
     def create(cls) -> dict:

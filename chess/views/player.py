@@ -18,8 +18,8 @@ class PlayerView:
             return "PlayerView.read_all_players", data
         elif choice == "3":
             return "MainView.menu", data
-        else:
-            return "PlayerView.menu", data
+
+        return "PlayerView.menu", data
 
     @staticmethod
     def create_player(data={}):
@@ -33,8 +33,6 @@ class PlayerView:
             birthdate=player_data["birthdate"],
         )
         new_player.create()
-
-        # print("Player created successfully.")
 
         return "PlayerView.menu", data
 
@@ -56,9 +54,6 @@ class PlayerView:
     def select_a_player(data={}):
         """Display a list of players."""
 
-        # GOOD IDEA BUT => SELECT DIRECTLY IN APPORIORATE VIES
-        # PlayerTemplate.read_all(players)
-
         GenericErrorTemplate.not_implemented("Not implemented yet")
 
         return "PlayerView.menu", data
@@ -67,60 +62,50 @@ class PlayerView:
     def update_player(data={}) -> dict:
         """Update player attributes."""
 
-        # SELECT PLAYER
-        #   => selection ici ??? => crée  un tempalte ?? =>  ALLEZ GO
-        #   OU view à part ???  ==> NON PAS BONNE OPTION
-
-        # ID DU PLAYER
-        # LOAD DU PLAYER EN BASE read by id => Player.read_one(id)
-        # TRASNFORM TO DICT
-        # tEMPLATE update player CHNAGE ATTRIBUTES
-        # UPDATE PLAYER IN DB
-        # save ... => p.update()
+        GenericErrorTemplate.not_implemented("Not implemented yet")
 
         return "PlayerView.menu", data
 
-    # @staticmethod
-    # def confirm_delete(data={}) -> bool:
-    #     """Confirm player deletion."""
+    @staticmethod
+    def confirm_delete(data={}) -> bool:
+        """Confirm player deletion."""
 
-    #     return PlayerTemplate.confirm_delete(player)
+        GenericErrorTemplate.not_implemented("Not implemented yet")
 
-    # @staticmethod
-    # def deleted_successfully(data={}):
-    #     """Confirmation message for successful delete."""
-
-    #     PlayerTemplate.deleted_successfully(player)
+        return "PlayerView.menu", data
 
     @staticmethod
-    def list_players():
+    def list_players(data={}):
         """List all players."""
 
         players = Player.read_all()
-        if players:
-            print("\nList of Players:")
-            for i, player in enumerate(players):
-                print(f"{i}. {player.firstname} {player.lastname}")
-        else:
-            print("No players found.")
+
+        players_dict = [
+            player.to_dict() for player in players if isinstance(player, Player)
+        ]
+
+        PlayerTemplate.read_all(players_dict)
+
+        return "PlayerView.menu", data
 
     @staticmethod
-    def select_player():
+    def select_player(data={}):
         """Select a player from the list."""
-        PlayerView.list_players()
-        choice = input("Enter the number of the player to add to a tournament('' or 0 to return):")
 
-        if choice.isdigit():
-            index = int(choice)
-            players = Player.read_all()
-            if 0 <= index < len(players):
-                return players[index]
-            else:
-                print("Invalid player selection.")
-                return None
-        elif choice == "" or choice == "0":
-            print("Returning to menu.")
-            return None
-        else:
-            print("Invalid input.")
-            return None
+        players = Player.read_all()
+
+        players_dict = [
+            player.to_dict() for player in players if isinstance(player, Player)
+        ]
+
+        PlayerView.select_player(players_dict)
+
+        p_dict = input(
+            "Enter the number of the player to add to a tournament('' or 0 to return):"
+        )
+
+        if not p_dict:
+            print("No player selected.")
+            return "PlayerView.menu", data
+
+        return "PlayerView.menu", {"p_dict": p_dict}

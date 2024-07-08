@@ -10,40 +10,44 @@ from chess.views.player import PlayerView
 class TournamentView:
     """Handles tournament management operations."""
 
-    def __init__(self):
-        self.tournament = None
-
-    def menu(self):
+    @staticmethod
+    def menu(data={}):
         while True:
             choice = TournamentTemplate.menu()
 
             if choice == "1":
-                name = input("Enter tournament name: ")
-                start_date = input("Enter start date (YYYY-MM-DD): ")
-                end_date = input("Enter end date (YYYY-MM-DD): ")
-                description = input("Enter tournament description: ")
-                location = input("Enter tournament location: ")
+                # name = input("Enter tournament name: ")
+                # start_date = input("Enter start date (YYYY-MM-DD): ")
+                # end_date = input("Enter end date (YYYY-MM-DD): ")
+                # description = input("Enter tournament description: ")
+                # location = input("Enter tournament location: ")
 
-                self.create_tournament(
-                    name, start_date, end_date, description, location
-                )
+                # self.create_tournament(
+                #     name, start_date, end_date, description, location
+                # )
+                raise ArithmeticError("NO PRINT IN VIEW ;) ")
             elif choice == "2":
                 self.add_player_to_tournament()
+
             elif choice == "3":
                 self.launch_tournament_menu()
+
             elif choice == "4":
                 self.display_rankings()
+
             elif choice == "5":
                 self.list_all_tournaments()
+
             elif choice == "6":
                 self.view_rounds_and_input_scores()
+
             elif choice == "7":
-                return "MainView.menu"
+                return "MainView.menu", data
             else:
-                print("Invalid choice. Please enter a number between 1 and 7.")
+                "TournamentView.menu", data
 
     @staticmethod
-    def list_all_tournaments():
+    def list_all_tournaments(data={}):
         """List all available tournaments."""
         tournaments_data = Tournament.db.all()
         tournaments = [Tournament.from_dict(data) for data in tournaments_data]
@@ -76,7 +80,7 @@ class TournamentView:
             print("Rounds created successfully.")
 
     @staticmethod
-    def launch_tournament_menu():
+    def launch_tournament_menu(data={}):
         """Menu to select and launch a tournament."""
 
         TournamentView.list_all_tournaments()
@@ -147,7 +151,7 @@ class TournamentView:
         return ""
 
     @staticmethod
-    def add_player_to_tournament():
+    def add_player_to_tournament(data={}):
         """Add a player to a selected tournament."""
 
         player = PlayerView.select_player()
@@ -260,16 +264,19 @@ class TournamentView:
                     continue
 
                 # Safely retrieve player attributes using attribute access
-                player_firstname = player.firstname if hasattr(player, 'firstname') else ''
-                player_lastname = player.lastname if hasattr(player, 'lastname') else ''
-
-                print(
-                    f"Match: {player_firstname} {player_lastname} "
-                    f"Score: {score}"
+                player_firstname = (
+                    player.firstname if hasattr(player, "firstname") else ""
                 )
+                player_lastname = player.lastname if hasattr(player, "lastname") else ""
+
+                print(f"Match: {player_firstname} {player_lastname} " f"Score: {score}")
 
                 try:
-                    new_score = float(input(f"Enter new score for {player_firstname} {player_lastname}: "))
+                    new_score = float(
+                        input(
+                            f"Enter new score for {player_firstname} {player_lastname}: "
+                        )
+                    )
                 except ValueError:
                     print("Invalid score input. Please enter a valid number.")
                     continue
@@ -281,14 +288,18 @@ class TournamentView:
                 print("Match data not found or has invalid structure.")
 
         # After updating all matches, update the round_data
-        round_data.matches = round_data.matches  # Ensure round_data.matches is correctly structured
+        round_data.matches = (
+            round_data.matches
+        )  # Ensure round_data.matches is correctly structured
         round_data.update()
 
     @staticmethod
     def display_rankings():
         """Static method to display rankings of the selected tournament."""
         TournamentView.list_all_tournaments()
-        choice = input("Enter the number of the tournament to display rankings (or 0 to return): ")
+        choice = input(
+            "Enter the number of the tournament to display rankings (or 0 to return): "
+        )
 
         if choice.isdigit():
             index = int(choice) - 1

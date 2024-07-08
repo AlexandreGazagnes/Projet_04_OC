@@ -10,6 +10,7 @@ class MainView:
     @staticmethod
     def menu(data={}):
         """Display the main menu and handle user input."""
+
         choice = MainTemplate.menu()
 
         if choice == "1":
